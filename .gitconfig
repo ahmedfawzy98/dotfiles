@@ -4,6 +4,6 @@
 
 # aliases
     [alias]
-    ad = add
+    ad = add -u
     cm = commit -m
     st = status

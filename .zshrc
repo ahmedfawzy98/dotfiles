@@ -3,13 +3,14 @@
 
 # Path to your oh-my-zsh installation.
 export ZSH="/home/ahmed/.oh-my-zsh"
-
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="arrow"
 
+#pubip = "$(dig +short myip.opendns.com @resolver1.opendns.com)"
+#echo "MY WAN/Public IP address: ${pubip}"
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
 # a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
@@ -97,7 +98,11 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+lanip=$(hostname -I)
+wanip=$(dig +short myip.opendns.com @resolver1.opendns.com)
 alias df='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias dswp='rm -rf /home/ahmed/.cache/vim/swaps/*'
+alias ips="echo 'WAN IP: ${wanip}'; echo 'LAN IP: ${lanip}'"
 #
 #set editing-mode vi
 ## vi settings
@@ -110,3 +115,4 @@ alias df='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
 export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden -g "!{.git,node_modules}"'
+

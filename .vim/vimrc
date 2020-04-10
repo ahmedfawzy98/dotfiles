@@ -89,6 +89,9 @@ Plug 'tpope/vim-endwise'
 Plug 'davidhalter/jedi-vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/syntastic'
+Plug 'joonty/vdebug'
+Plug 'justmao945/vim-clang'
+
 
 
 Plug 'scrooloose/nerdtree'
@@ -154,13 +157,14 @@ let g:airline#extensions#tabline#buffer_nr_show = 1
 "let g:VimuxOrientation = "v"
 
 " configuration of NERDTree
-autocmd StdinReadPre * let s:std_in=1
+"autocmd StdinReadPre * let s:std_in=1
 "autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-autocmd StdinReadPre * let s:std_in=1
+"autocmd StdinReadPre * let s:std_in=1
 "autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 
-let g:NERDTreeDirArrowExpandable = ''
-let g:NERDTreeDirArrowCollapsible = ''
+let g:NERDTreeWinSize=25
+let g:NERDTreeDirArrowExpandable = '▸'
+let g:NERDTreeDirArrowCollapsible = '▾'
 "autocmd BufEnter * call SyncTree()
 let g:NERDTreeIgnore = ['^node_modules$']
 if exists('g:loaded_webdevicons')
@@ -348,7 +352,7 @@ execute "set <A-j>=\ej"
 execute "set <A-k>=\ek"
 execute "set <A-h>=\eh"
 execute "set <A-l>=\el"
-nmap <silent> <A-g> :NERDTreeToggle<cr>
+nmap <silent> <A-g> :NERDTreeToggle %:p:h<cr>
 vmap  <plug>NERDCommenterToggle
 nmap  <plug>NERDCommenterToggle
 "nmap <silent> <leader>f <c-f>
@@ -406,8 +410,8 @@ match ErrorMsg '\s\+$'
 " remove trailing whitespaces automatically
 "autocmd BufWritePre * %s/\s\+$//e
 " go to end of line and start of line inside insert mode
-inoremap <leader>e <c-o>$
-inoremap <leader>s <c-o>0
+inoremap <leader>e <c-o>A
+inoremap <leader>s <c-o>I
 " insert new line above and below quickly
 nnoremap <leader>o o<esc>
 nnoremap <leader>O O<esc>
@@ -423,3 +427,7 @@ nnoremap <S-Tab> <<_
 inoremap <S-Tab> <C-D>
 vnoremap <Tab> >gv
 vnoremap <S-Tab> <gv
+noremap <C-a> ggVG
+
+" key for opening any file in chrome and specifically for .md files
+nnoremap <leader>` :!google-chrome %:p<cr><cr>

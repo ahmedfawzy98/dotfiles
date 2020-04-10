@@ -11,6 +11,7 @@
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
 set $mod Mod4
+#set $Alt Mod1
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -34,6 +35,8 @@ floating_modifier $mod
 
 # start a terminal
 bindsym $mod+Return exec i3-sensible-terminal
+#bindsym $mod+shift+Return exec gnome-terminal --working-directory="`xcwd`"
+#bindsym $mod+shift+Return exec 
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -96,18 +99,22 @@ bindsym $mod+a focus parent
 # focus the child container
 bindsym $mod+Shift+d focus child
 
+# move workspaces between monitors
+bindsym $mod+m move workspace to output right
+bindsym $mod+shift+m move workspace to output left
+
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
 set $ws1 "1  "
 set $ws2 "2  "
 set $ws3 "3  "
 set $ws4 "4  "
-set $ws5 "5  "
+set $ws5 "5 "
 set $ws6 "6 "
 set $ws7 "7 "
 set $ws8 "8 "
 set $ws9 "9 "
-set $ws10 "10 "
+set $ws10 "10 "
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
@@ -134,9 +141,10 @@ bindsym $mod+Shift+9 move container to workspace $ws9
 bindsym $mod+Shift+0 move container to workspace $ws10
 
 assign [class="Station"] $ws3
-assign [class="Spotify"] $ws5
-assign [class="Pavucontrol"] $ws5
+for_window [class="Spotify"] move to workspace $ws10
+assign [class="Pavucontrol"] $ws10
 assign [class="Google-chrome"] $ws2
+
 # reload the configuration file
 bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
@@ -209,8 +217,8 @@ bindsym XF86AudioLowerVolume exec --no-startup-id pactl -- set-sink-volume @DEFA
 bindsym XF86AudioMute exec --no-startup-id pactl -- set-sink-mute @DEFAULT_SINK@ toggle # mute sound
 
 # Sreen brightness controls
-bindsym XF86MonBrightnessUp exec sh ~/.config/i3/backlight.sh -inc 20 # increase screen brightness
-bindsym XF86MonBrightnessDown exec sh ~/.config/i3/backlight.sh -dec 20 # decrease screen brightness
+bindsym XF86MonBrightnessUp exec sh ~/.config/i3/backlight.sh -inc 50 # increase screen brightness
+bindsym XF86MonBrightnessDown exec sh ~/.config/i3/backlight.sh -dec 50 # decrease screen brightness
 #
 # Media player controls
 bindsym XF86AudioPlay exec playerctl play
@@ -218,16 +226,16 @@ bindsym XF86AudioPause exec playerctl pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
-bindsym $mod+shift+x exec sh ~/.config/i3/lock.sh
-set $Locker sh ~/.config/i3/lock.sh
+set $Locker i3lock-fancy & dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop
+
 
 set $mode_system (l)lock  (e)logout  (s)suspend  (h)hibernate  (r)reboot  (Shift+s)shutdown
 
 mode "$mode_system" {
 	bindsym l exec --no-startup-id $Locker , mode "default"
 	bindsym e exec --no-startup-id i3-msg exit, mode "default"
-	bindsym s exec --no-startup-id $Locker && systemctl suspend, mode "default"
-	bindsym h exec --no-startup-id $Locker && systemctl hibernate, mode "default"
+	bindsym s exec --no-startup-id $Locker & systemctl suspend, mode "default"
+	bindsym h exec --no-startup-id $Locker & systemctl hibernate, mode "default"
 	bindsym r exec --no-startup-id systemctl reboot, mode "default"
 	bindsym Shift+s exec --no-startup-id shutdown now, mode "default"
 
@@ -243,9 +251,20 @@ set $background_path Pictures/i3_backgrounds/graham-holtshausen-fUnfEz3VLv4-unsp
 exec_always feh --bg-scale $background_path
 exec_always --no-startup-id blueman-applet
 exec_always --no-startup-id nm-applet
-exec_always --no-startup-id xrandr | grep 'HDMI-1 connected' && xrandr --output eDP-1 --auto --output HDMI-1 --auto --right-of eDP-1
+exec_always --no-startup-id xrandr | rg 'HDMI-1 connected' && xrandr --output eDP-1 --auto --output HDMI-1 --auto --right-of eDP-1
+exec_always --no-startup-id xrandr | rg 'HDMI-1 disconnected' && xrandr --auto
 exec_always compton -f
 exec --no-startup-id /home/ahmed/apps/Station-1.65.0-x86_64.AppImage
+exec --no-startup-id chmod a+rw /sys/class/backlight/intel_backlight/brightness
 
-#bindsym $mod+d exec rofi -show run -lines 3 -eh 2 -width 100 -padding 400 -opacity "85" -bw 0 -bc "$bg-color" -bg "$bg-color" -fg "$text-color" -hlbg "$bg-color" -hlfg "#9575cd"
+hide_edge_borders smart
+# auto locker of screen 
+#exec_always xautolock -time 15 -locker 'systemctl suspend'
+exec_always --no-startup-id xautolock -time 5 -locker 'dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop; i3lock-fancy'
 
+# Desktop screenshot
+bindsym --release Print exec "scrot ~/Pictures/screenshots/$(date --iso-8601='seconds').png -m -e 'xclip -selection c -t image/png < $f'"
+# Choose window
+bindsym --release Control+Print exec "scrot ~/Pictures/screenshots/$(date --iso-8601='seconds').png -u -e 'xclip -selection c -t image/png < $f'"
+# Selection screenshot
+bindsym --release Shift+Print exec "scrot ~/Pictures/screenshots/$(date --iso-8601='seconds').png -s -e 'xclip -selection c -t image/png < $f'"
