@@ -22,7 +22,7 @@ font pango:monospace 8
 #font pango:DejaVu Sans Mono 8
 #exec --no-startup-id setxkbmap -model pc105 -layout us,ar -option grp:alt_shift_toggle
 #bindsym $mod+p exec setxkbmap a
-exec_always "setxkbmap -layout us,ar -option grp:alt_shift_toggle"
+#exec_always "setxkbmap -layout us,ar -option grp:alt_shift_toggle"
 # Before i3 v4.8, we used to recommend this one as the default:
 # font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
 # The font above is very space-efficient, that is, it looks good, sharp and
@@ -36,7 +36,7 @@ floating_modifier $mod
 # start a terminal
 bindsym $mod+Return exec i3-sensible-terminal
 #bindsym $mod+shift+Return exec gnome-terminal --working-directory="`xcwd`"
-#bindsym $mod+shift+Return exec 
+#bindsym $mod+shift+Return exec
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -221,8 +221,8 @@ bindsym XF86MonBrightnessUp exec sh ~/.config/i3/backlight.sh -inc 50 # increase
 bindsym XF86MonBrightnessDown exec sh ~/.config/i3/backlight.sh -dec 50 # decrease screen brightness
 #
 # Media player controls
-bindsym XF86AudioPlay exec playerctl play
-bindsym XF86AudioPause exec playerctl pause
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym Control+space exec playerctl play-pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
@@ -254,13 +254,18 @@ exec_always --no-startup-id nm-applet
 exec_always --no-startup-id xrandr | rg 'HDMI-1 connected' && xrandr --output eDP-1 --auto --output HDMI-1 --auto --right-of eDP-1
 exec_always --no-startup-id xrandr | rg 'HDMI-1 disconnected' && xrandr --auto
 exec_always compton -f
-exec --no-startup-id /home/ahmed/apps/Station-1.65.0-x86_64.AppImage
+#exec --no-startup-id /home/ahmed/apps/Station-1.65.0-x86_64.AppImage
+exec google-chrome
+exec google-chrome  --new-window 'https://gmail.com' 'https://web.whatsapp.com' 'https://messenger.com' 'https://app.slack.com/client' 'https://kanbanflow.com/'
 exec --no-startup-id chmod a+rw /sys/class/backlight/intel_backlight/brightness
 
+# layout conversion
+exec --no-startup-id "setxkbmap -layout us,ar -option grp:alt_shift_toggle"
+
 hide_edge_borders smart
-# auto locker of screen 
+# auto locker of screen
 #exec_always xautolock -time 15 -locker 'systemctl suspend'
-exec_always --no-startup-id xautolock -time 5 -locker 'dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop; i3lock-fancy'
+#exec_always --no-startup-id xautolock -time 5 -locker 'dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop; i3lock-fancy'
 
 # Desktop screenshot
 bindsym --release Print exec "scrot ~/Pictures/screenshots/$(date --iso-8601='seconds').png -m -e 'xclip -selection c -t image/png < $f'"
@@ -268,3 +273,4 @@ bindsym --release Print exec "scrot ~/Pictures/screenshots/$(date --iso-8601='se
 bindsym --release Control+Print exec "scrot ~/Pictures/screenshots/$(date --iso-8601='seconds').png -u -e 'xclip -selection c -t image/png < $f'"
 # Selection screenshot
 bindsym --release Shift+Print exec "scrot ~/Pictures/screenshots/$(date --iso-8601='seconds').png -s -e 'xclip -selection c -t image/png < $f'"
+

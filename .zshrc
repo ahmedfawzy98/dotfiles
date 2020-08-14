@@ -101,18 +101,35 @@ source $ZSH/oh-my-zsh.sh
 lanip=$(hostname -I)
 wanip=$(dig +short myip.opendns.com @resolver1.opendns.com)
 alias df='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias out='cmake --build build/ && clear && build/output'
+alias outi='cmake --build build/ && clear && cat input.txt | build/output'
+alias outj='javac solution.java && clear && cat input.txt | java Solution'
 alias dswp='rm -rf /home/ahmed/.cache/vim/swaps/*'
 alias ips="echo 'WAN IP: ${wanip}'; echo 'LAN IP: ${lanip}'"
-#
-#set editing-mode vi
-## vi settings
-#$if mode=vi
-    #set keymap vi-insert
-    #'kj': vi-movement-mode # remap escape
-#$endif
+alias cppProject='source ~/.config/i3/cppProject.sh'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden -g "!{.git,node_modules}"'
 
+function ranger {
+    local IFS=$'\t\n'
+    local tempfile="$(mktemp -t tmp.XXXXXX)"
+    local ranger_cmd=(
+        command
+        ranger
+        --cmd="map Q chain shell echo %d > "$tempfile"; quitall"
+    )
+
+    ${ranger_cmd[@]} "$@"
+    if [[ -f "$tempfile" ]] && [[ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]]; then
+        cd -- "$(cat "$tempfile")" || return
+    fi
+    command rm -f -- "$tempfile" 2>/dev/null
+    command clear
+}
+
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"

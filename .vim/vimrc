@@ -3,12 +3,15 @@ let mapleader =  ',' " map the leader key to comma
 set path+=**
 
 " Indentaion Options
-set autoindent " new lines inherit the indentation of previous lines
-set expandtab " convert tabs are spaces
 filetype indent on " enable indentation rules that are file-type specific
+set autoindent " new lines inherit the indentation of previous lines
+set smartindent
+set cindent
+set expandtab " convert tabs are spaces
 set shiftround " when shifting lines, round the indentation to the nearest multiple of 'shiftwidth'
 set shiftwidth=4 " when shifting, indent using four spaces
 set tabstop=4 " number of visual spaces per TAB
+set softtabstop=4
 set smarttab " insert 'tabstop' number of spaces when the 'tab' key is pressed
 
 " Search Options
@@ -38,6 +41,7 @@ set ruler " always show cursor position
 set wildmenu " display command line's tab complete options as a menu
 set tabpagemax=50 " maximum number of tab pages that can be opened from the command line
 set cursorline " highlight current line
+"set cursorcolumn " highlight current column
 set number " show line numbers
 set relativenumber " show line number on the current line and relative numbers on all other lines
 set noerrorbells " disable beep on errors
@@ -47,7 +51,6 @@ set title " set the windows's title, reflecting the file currently being edited
 set showcmd " show command in bottom bar
 set shiftwidth=4 " number of spaces to use for autoindent
 set backspace=2 " fix backspace behavior on most terminals
-"set t_Co=256 " added to be appropriate with tmux
 
 
 " Code Folding Options
@@ -65,12 +68,14 @@ set dir=~/.cache/vim/swaps// " directory to store swap files
 set formatoptions+=j " delete comment characters when joining lines
 set history=1000 " increase the undo limit
 set nomodeline " ignore file's mode lines and use vimrc configurations instead
-"set shell " the shell used to execute commands
-set spell " enable pellchecking
+set spell " enable spellchecking
 set timeout timeoutlen=500 ttimeoutlen=100
 set autowrite
-"
-"
+"set termguicolors
+
+set splitbelow
+set splitright
+
 " Manage plugins with vim-plug
 call plug#begin()
 Plug 'tomasiser/vim-code-dark'
@@ -78,21 +83,14 @@ Plug 'luochen1990/rainbow'
 Plug 'yggdroot/indentline'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'mattn/emmet-vim'
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
-Plug 'mhinz/vim-signify', { 'branch': 'legacy' }
-Plug 'ctrlpvim/ctrlp.vim' " fuzzy find files
 Plug 'tpope/vim-endwise'
-"Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'davidhalter/jedi-vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/syntastic'
-Plug 'joonty/vdebug'
-Plug 'justmao945/vim-clang'
-
-
 
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -101,16 +99,21 @@ Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'airblade/vim-gitgutter'
 Plug 'scrooloose/nerdcommenter'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'benmills/vimux'
+
+Plug 'vim-ruby/vim-ruby'
+Plug 'tpope/vim-rails'
+Plug 'thaerkh/vim-workspace'
+Plug 'sheerun/vim-polyglot'
+Plug 'valloric/matchtagalways'
 
 Plug 'leafOfTree/vim-vue-plugin'
 Plug 'ryanoasis/vim-devicons'
 call plug#end()
 colorscheme codedark " change color scheme
 
-" configuration of syntastic plugin
-let g:syntastic_python_checkers = ['pylint']
-let g:syntastic_quiet_messages = { "type": "style" }
+" emmet plugin configs
+let g:user_emmet_leader_key='<Tab>'
+
 
 let g:fzf_colors =
         \ { 'fg':      ['fg', 'Normal'],
@@ -119,7 +122,6 @@ let g:fzf_colors =
 \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
 \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
 \ 'hl+':     ['fg', 'Statement'],
-\ 'info':    ['fg', 'PreProc'],
 \ 'border':  ['fg', 'Ignore'],
 \ 'prompt':  ['fg', 'Conditional'],
 \ 'pointer': ['fg', 'Exception'],
@@ -144,29 +146,17 @@ let g:rainbow_conf = {
 \}
 \}
 
-"let g:ale_fixers = ['prettier', 'eslint']
 " configurations of airline
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
 
-" configurations to tmux_navigator
-"let g:tmux_navigator_save_on_switch = 1
-"
-" configurations of vmux
-"let g:VimuxOrientation = "v"
-
 " configuration of NERDTree
-"autocmd StdinReadPre * let s:std_in=1
-"autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-"autocmd StdinReadPre * let s:std_in=1
-"autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
-
-let g:NERDTreeWinSize=25
+let g:NERDTreeWinSize = 25
 let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
-"autocmd BufEnter * call SyncTree()
 let g:NERDTreeIgnore = ['^node_modules$']
+"au bufEnter * if @% == 'NERD_tree_1' | execute 'normal R' | endif
 if exists('g:loaded_webdevicons')
 call webdevicons#refresh()
 endif
@@ -192,148 +182,6 @@ call NERDTreeHighlightFile('js', 'Red', 'none', '#ffa500', '#151515')
 call NERDTreeHighlightFile('php', 'Magenta', 'none', '#ff00ff', '#151515')
 call NERDTreeHighlightFile('vue', 'green', 'none', '#8FAA54', '#31B53E')
 
-" This is configurations of coc plugin
-"let g:endwise_no_mappings = v:true
-"inoremap <expr> <Plug>CustomCocCR pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-"imap <CR> <Plug>CustomCocCR<Plug>DiscretionaryEnd
-"command! -nargs=0 Prettier :CocCommand prettier.formatFile
-"let g:coc_global_extensions = [
-"\ 'coc-snippets',
-"\ 'coc-pairs',
-"\ 'coc-tsserver',
-"\ 'coc-eslint',
-"\ 'coc-prettier',
-"\ 'coc-json',
-"\ 'coc-html',
-"\ 'coc-css',
-"\ 'coc-vetur',
-"\ 'coc-phpls',
-"\ 'coc-java',
-"\ 'coc-solargraph',
-"\ 'coc-yaml',
-"\ 'coc-python',
-"\ 'coc-emmet',
-"\ 'coc-lists',
-"\ 'coc-xml',
-"\ 'coc-git',
-"\ 'coc-highlight',
-"\ 'coc-spell-checker',
-"\ ]
-"set hidden
-""set cmdheight=2
-"set updatetime=300
-"set signcolumn=yes
-"set shortmess+=c
-"set nobackup
-"set nowritebackup
-"" Use tab for trigger completion with characters ahead and navigate.
-"" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-"inoremap <silent><expr> <TAB>
-    "\ pumvisible() ? "\<C-n>" :
-    "\ <SID>check_back_space() ? "\<TAB>" :
-    "\ coc#refresh()
-"inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-"function! s:check_back_space() abort
-"let col = col('.') - 1
-"return !col || getline('.')[col - 1]  =~# '\s'
-"endfunction
-
-"" Use <c-space> to trigger completion.
-"inoremap <silent><expr> <c-space> coc#refresh()
-
-"" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-"" Coc only does snippet and additional edit on confirm.
-""inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>" Or use `complete_info` if your vim support it, like:
-"" inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-
-"" Use `[g` and `]g` to navigate diagnostics
-"nmap <silent> [g <Plug>(coc-diagnostic-prev)
-"nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-"" Remap keys for gotos
-"nmap <silent> gd <Plug>(coc-definition)
-"nmap <silent> gy <Plug>(coc-type-definition)
-"nmap <silent> gi <Plug>(coc-implementation)
-"nmap <silent> gr <Plug>(coc-references)
-
-"" Use K to show documentation in preview window
-"nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-"function! s:show_documentation()
-"if (index(['vim','help'], &filetype) >= 0)
-"execute 'h '.expand('<cword>')
-"else
-"call CocAction('doHover')
-"endif
-"endfunction
-
-"" Highlight symbol under cursor on CursorHold
-"autocmd CursorHold * silent call CocActionAsync('highlight')
-
-"" Remap for rename current word
-"nmap <F2> <Plug>(coc-rename)
-
-"" Remap for format selected region
-"xmap <leader>f  <Plug>(coc-format-selected)
-"nmap <leader>f  <Plug>(coc-format-selected)
-
-"augroup mygroup
-  "autocmd!
-  "" Setup formatexpr specified filetype(s).
-  "autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  "" Update signature help on jump placeholder
-  "autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-"augroup end
-
-"" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-"xmap <leader>a  <Plug>(coc-codeaction-selected)
-"nmap <leader>a  <Plug>(coc-codeaction-selected)
-
-"" Remap for do codeAction of current line
-"nmap <leader>ac  <Plug>(coc-codeaction)
-"" Fix autofix problem of current line
-"nmap <leader>qf  <Plug>(coc-fix-current)
-
-"" Create mappings for function text object, requires document symbols feature of languageserver.
-"xmap if <Plug>(coc-funcobj-i)
-"xmap af <Plug>(coc-funcobj-a)
-"omap if <Plug>(coc-funcobj-i)
-"omap af <Plug>(coc-funcobj-a)
-
-"" Use <C-d> for select selections ranges, needs server support, like: coc-tsserver, coc-python
-"nmap <silent> <C-d> <Plug>(coc-range-select)
-"xmap <silent> <C-d> <Plug>(coc-range-select)
-
-"" Use `:Format` to format current buffer
-"command! -nargs=0 Format :call CocAction('format')
-
-"" Use `:Fold` to fold current buffer
-"command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-
-"" use `:OR` for organize import of current buffer
-"command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
-
-"" Add status line support, for integration with other plugin, checkout `:h coc-status`
-"set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-
-"" Manage extensions
-"nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
-"" Show commands
-"nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
-"" Find symbol of current document
-"nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
-"" Search workspace symbols
-"nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
-"" Do default action for next item.
-"nnoremap <silent> <space>j  :<C-u>CocNext<CR>
-"" Do default action for previous item.
-"nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
-"" Resume latest coc list
-"nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
-
-"" End of coc configurations
-
 " Custom mappings
 nmap <silent> <leader>w :w<cr>
 map  <silent> <leader><leader> <esc>
@@ -352,11 +200,9 @@ execute "set <A-j>=\ej"
 execute "set <A-k>=\ek"
 execute "set <A-h>=\eh"
 execute "set <A-l>=\el"
-nmap <silent> <A-g> :NERDTreeToggle %:p:h<cr>
+nmap <silent> <A-g> :NERDTreeToggle<cr>
 vmap  <plug>NERDCommenterToggle
 nmap  <plug>NERDCommenterToggle
-"nmap <silent> <leader>f <c-f>
-"nmap <silent> <leader>b <c-b>
 nmap <silent> <A-f> :bn<cr>
 nmap <silent> <A-d> :bp<cr>
 nmap <silent> <A-w> :bd<cr>
@@ -365,13 +211,22 @@ nmap <silent> <A-j> :TmuxNavigateDown<cr>
 nmap <silent> <A-k> :TmuxNavigateUp<cr>
 nmap <silent> <A-h> :TmuxNavigateLeft<cr>
 nmap <silent> <A-l> :TmuxNavigateRight<cr>
-"unmap <c-d>
 
-let &t_SI = "\<Esc>[6 q"
-let &t_SR = "\<Esc>[4 q"
-let &t_EI = "\<Esc>[2 q"
-nmap <leader>vc :VimuxPromptCommand<cr>
-
+" with cursor blinking
+if has("autocmd")
+  au VimEnter,InsertLeave * silent execute '!echo -ne "\e[1 q"' | redraw!
+  au InsertEnter,InsertChange *
+    \ if v:insertmode == 'i' |
+    \   silent execute '!echo -ne "\e[5 q"' | redraw! |
+    \ elseif v:insertmode == 'r' |
+    \   silent execute '!echo -ne "\e[3 q"' | redraw! |
+    \ endif
+  au VimLeave * silent execute '!echo -ne "\e[ q"' | redraw!
+endif
+" paste settings
+let &t_SI = "\<Esc>\<Esc>[?2004h"
+"let &t_SR = "\<Esc>\<Esc>[4 q"
+let &t_EI = "\<Esc>\<Esc>[?2004l"
 inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 function! XTermPasteBegin()
     set pastetoggle=<Esc>[201~
@@ -381,6 +236,8 @@ endfunction
 
 nnoremap n nzz
 nnoremap N Nzz
+inoremap <leader>zz <C-o>zz
+
 
 nnoremap <c-s-down> :m .+1<CR>==
 nnoremap <c-s-up> :m .-2<CR>==
@@ -395,10 +252,7 @@ if &term =~'^screen'
     execute "set <xup>=\e[1;*A"
     execute "set <xdown>=\e[1;*B"
 endif
-" copying settings
-"inoremap <C-v> <ESC>"+pa
-"vnoremap <C-c> "+y
-"vnoremap <C-d> "+d
+
 augroup toggle_relative_number
     autocmd InsertEnter * setlocal norelativenumber
     autocmd InsertLeave * setlocal relativenumber
@@ -408,7 +262,7 @@ nmap <silent> <leader>h :nohlsearch<cr>
 " highlight trailing whitespaces
 match ErrorMsg '\s\+$'
 " remove trailing whitespaces automatically
-"autocmd BufWritePre * %s/\s\+$//e
+autocmd BufWritePre * %s/\s\+$//e
 " go to end of line and start of line inside insert mode
 inoremap <leader>e <c-o>A
 inoremap <leader>s <c-o>I
@@ -418,9 +272,11 @@ nnoremap <leader>O O<esc>
 inoremap <leader>o <c-o>o
 inoremap <leader>O <c-o>O
 
-"inoremap <cr>
-" configurations of fzf plugin
-nnoremap <leader>S :Files<cr>
+" configurations of fzf and Rg
+nnoremap <silent> <leader>S :Files<cr>
+nnoremap <silent> <leader>G :Rg<cr>
+inoremap <silent> <expr> <leader>p fzf#vim#complete#path('rg --files')
+nnoremap <silent> <leader>f :NERDTreeFind<cr>
 
 nnoremap <Tab> >>_
 nnoremap <S-Tab> <<_
@@ -431,3 +287,22 @@ noremap <C-a> ggVG
 
 " key for opening any file in chrome and specifically for .md files
 nnoremap <leader>` :!google-chrome %:p<cr><cr>
+if has('persistent_undo')      "check if your vim version supports it
+set undofile                 "turn on the feature
+set undodir=$HOME/.vim/undo  "directory where the undo files will be stored
+endif  "
+
+" configurations for vim-workspace plugin
+nnoremap <leader>t :ToggleWorkspace<CR>
+let g:workspace_create_new_tabs = 0
+let g:workspace_autosave_untrailspaces = 0
+
+" color column and toggle relative number
+nnoremap <leader>CC :execute "set colorcolumn=" . (&colorcolumn == "" ? "100" : "")<CR>
+nnoremap <leader>ll :set invrelativenumber<cr>
+
+nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
+nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 2/3)<CR>
+
+autocmd BufNewFile,BufRead *.strings   set syntax=swift
+
