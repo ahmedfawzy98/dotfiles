@@ -32,7 +32,6 @@ set scrolloff=1 " the number of screen lines to keep above and below the cursor
 set sidescrolloff=5 " the number of screen columns to keep to the left and right of the cursor
 syntax enable " enable sytanx highlighting
 set wrap " enable line wrapping
-set clipboard=unnamed " to copy and paste from clipboard
 set clipboard=unnamedplus
 
 " User Interface Options
@@ -213,6 +212,7 @@ nmap <silent> <A-k> :TmuxNavigateUp<cr>
 nmap <silent> <A-h> :TmuxNavigateLeft<cr>
 nmap <silent> <A-l> :TmuxNavigateRight<cr>
 
+
 " with cursor blinking
 if has("autocmd")
   au VimEnter,InsertLeave * silent execute '!echo -ne "\e[1 q"' | redraw!
@@ -224,16 +224,18 @@ if has("autocmd")
     \ endif
   au VimLeave * silent execute '!echo -ne "\e[ q"' | redraw!
 endif
-" paste settings
-let &t_SI = "\<Esc>\<Esc>[?2004h"
+"paste settings
+"let &t_SI = "\<Esc>\<Esc>[?2004h"
 "let &t_SR = "\<Esc>\<Esc>[4 q"
-let &t_EI = "\<Esc>\<Esc>[?2004l"
-inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
-function! XTermPasteBegin()
-    set pastetoggle=<Esc>[201~
-    set paste
-    return ""
-endfunction
+"let &t_EI = "\<Esc>\<Esc>[?2004l"
+"inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+"function! XTermPasteBegin()
+    "set pastetoggle=<Esc>[201~
+    "set paste
+    "return ""
+"endfunction
+
+imap <C-V> <C-O>:set paste<CR><C-R><C-R>+<C-O>:set nopaste<CR>
 
 nnoremap n nzz
 nnoremap N Nzz
@@ -302,7 +304,10 @@ let g:workspace_autosave_untrailspaces = 0
 nnoremap <leader>CC :execute "set colorcolumn=" . (&colorcolumn == "" ? "100" : "")<CR>
 nnoremap <leader>ll :set invrelativenumber<cr>
 
+
+
 nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
 nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 2/3)<CR>
 
 autocmd BufNewFile,BufRead *.strings   set syntax=swift
+

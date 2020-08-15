@@ -1,5 +1,5 @@
 #!/bin/bash
-sudo apt install i3blocks git zsh curl vim rbenv feh tmux gpick i3lock-fancy xautolock pavucontrol htop ranger httpie compton xclip playerctl
+sudo apt install i3blocks git zsh curl vim rbenv feh tmux gpick i3lock-fancy xautolock pavucontrol htop ranger httpie compton xclip playerctl vim-gtk
 sudo snap install spotify discord postman vlc
 sudo snap install heroku --classic
 
