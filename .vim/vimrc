@@ -1,6 +1,6 @@
 
 let mapleader =  ',' " map the leader key to comma
-set path+=**
+"set path+=**
 
 " Indentaion Options
 filetype indent on " enable indentation rules that are file-type specific
@@ -62,9 +62,10 @@ set foldcolumn=1
 " Miscellaneous Options
 set autoread " automatically re-read files if unmodified inside Vim
 set backspace=indent,eol,start " allow backspacing over indentation, line breaks and insertion start
+
 set backupdir=~/.cache/vim " directory to store backup files
 set confirm " display a confirmation dialog when closing an unsaved file
-set dir=~/.cache/vim/swaps// " directory to store swap files
+set dir=~/.cache/vim/swaps/ " directory to store swap files
 set formatoptions+=j " delete comment characters when joining lines
 set history=1000 " increase the undo limit
 set nomodeline " ignore file's mode lines and use vimrc configurations instead
@@ -305,4 +306,3 @@ nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
 nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 2/3)<CR>
 
 autocmd BufNewFile,BufRead *.strings   set syntax=swift
-

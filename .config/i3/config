@@ -254,10 +254,9 @@ exec_always --no-startup-id nm-applet
 exec_always --no-startup-id xrandr | rg 'HDMI-1 connected' && xrandr --output eDP-1 --auto --output HDMI-1 --auto --right-of eDP-1
 exec_always --no-startup-id xrandr | rg 'HDMI-1 disconnected' && xrandr --auto
 exec_always compton -f
-#exec --no-startup-id /home/ahmed/apps/Station-1.65.0-x86_64.AppImage
-exec google-chrome
-exec google-chrome  --new-window 'https://gmail.com' 'https://web.whatsapp.com' 'https://messenger.com' 'https://app.slack.com/client' 'https://kanbanflow.com/'
-exec --no-startup-id chmod a+rw /sys/class/backlight/intel_backlight/brightness
+exec --no-startup-id google-chrome
+exec --no-startup-id /usr/bin/Station-1.65.0-x86_64.AppImage
+#exec --no-startup-id chmod -R a+rw /sys/class/backlight/intel_backlight/brightness
 
 # layout conversion
 exec --no-startup-id "setxkbmap -layout us,ar -option grp:alt_shift_toggle"
@@ -268,9 +267,9 @@ hide_edge_borders smart
 #exec_always --no-startup-id xautolock -time 5 -locker 'dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop; i3lock-fancy'
 
 # Desktop screenshot
-bindsym --release Print exec "scrot ~/Pictures/screenshots/$(date --iso-8601='seconds').png -m -e 'xclip -selection c -t image/png < $f'"
+bindsym --release Print exec "scrot ~/old-home/ahmed/Pictures/screenshots/$(date --iso-8601='seconds').png -m -e 'xclip -selection c -t image/png < $f'"
 # Choose window
-bindsym --release Control+Print exec "scrot ~/Pictures/screenshots/$(date --iso-8601='seconds').png -u -e 'xclip -selection c -t image/png < $f'"
+bindsym --release Control+Print exec "scrot ~/old-home/ahmed/Pictures/screenshots/$(date --iso-8601='seconds').png -u -e 'xclip -selection c -t image/png < $f'"
 # Selection screenshot
-bindsym --release Shift+Print exec "scrot ~/Pictures/screenshots/$(date --iso-8601='seconds').png -s -e 'xclip -selection c -t image/png < $f'"
+bindsym --release Shift+Print exec "scrot ~/old-home/ahmed/Pictures/screenshots/$(date --iso-8601='seconds').png -s -e 'xclip -selection c -t image/png < $f'"
 
