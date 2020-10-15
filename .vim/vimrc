@@ -1,12 +1,11 @@
-
 let mapleader =  ',' " map the leader key to comma
 "set path+=**
 
 " Indentaion Options
-filetype indent on " enable indentation rules that are file-type specific
+filetype plugin indent on " enable indentation rules that are file-type specific
 set autoindent " new lines inherit the indentation of previous lines
-set smartindent
-set cindent
+"set smartindent
+"set cindent
 set expandtab " convert tabs are spaces
 set shiftround " when shifting lines, round the indentation to the nearest multiple of 'shiftwidth'
 set shiftwidth=4 " when shifting, indent using four spaces
@@ -190,7 +189,7 @@ vmap <silent> <leader><leader> <esc>
 nmap <silent> <leader>R :source $MYVIMRC<cr>
 nmap <silent> <leader>q :q<cr>
 nmap <silent> <leader>V :e $MYVIMRC<cr>
-nnoremap <silent> <leader>z :e $MYZSHRC<cr>
+nnoremap <silent> <leader>Z :e $MYZSHRC<cr>
 
 execute "set <A-g>=\eg"
 execute "set <A-f>=\ef"
@@ -310,4 +309,3 @@ nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
 nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 2/3)<CR>
 
 autocmd BufNewFile,BufRead *.strings   set syntax=swift
-

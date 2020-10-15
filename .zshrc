@@ -98,6 +98,7 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+export MYZSHRC='~/.zshrc'
 lanip=$(hostname -I)
 wanip=$(dig +short myip.opendns.com @resolver1.opendns.com)
 alias df='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
@@ -107,6 +108,7 @@ alias outj='javac solution.java && clear && cat input.txt | java Solution'
 alias dswp='rm -rf /home/ahmed/.cache/vim/swaps/*'
 alias ips="echo 'WAN IP: ${wanip}'; echo 'LAN IP: ${lanip}'"
 alias cppProject='source ~/.config/i3/cppProject.sh'
+alias work='ranger ~/old-home/ahmed/work/'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -133,3 +135,5 @@ function ranger {
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"
+bindkey '^k' up-line-or-search
+bindkey '^j' down-line-or-search
